@@ -158,29 +158,7 @@ def main():
     
     # Sidebar for file upload
     with st.sidebar:
-        st.header("About")
-        
-        st.markdown(
-            """
-            This web app takes speaker-diarization outputs (CSV or JSON) and turns them into **interactive dashboards**.
-            """
-        )        
-        
-        st.markdown(
-            """
-            **Key Features**  
-            - **Speaker Turn Timelines**: Visualize exactly when each speaker talks  
-            - **Interactive Charts**: Drill into metrics like speaking duration, word counts, and sentiment  
-            """
-        )
-        
-        st.markdown(
-            """
-            Simply upload your diarization file and get a data-driven view of any multi-speaker audio—sports commentary or beyond.
-            For example we will use the the same csv file as used in the ["Speech-to-Chat" Hugging Face Space Made by kobakhit](https://huggingface.co/spaces/kobakhit/speech-to-chat)
 
-            """
-        )
 
 
         st.header("📁 Upload Transcripts")
@@ -210,6 +188,31 @@ def main():
                 
                 avg_segment = df['duration'].mean()
                 st.write(f"**Avg Segment:** {avg_segment:.1f}s")
+
+
+        st.header("About")
+        
+        st.markdown(
+            """
+            This web app takes speaker-diarization outputs (CSV or JSON) and turns them into **interactive dashboards**.
+            """
+        )        
+        
+        st.markdown(
+            """
+            **Key Features**  
+            - **Speaker Turn Timelines**: Visualize exactly when each speaker talks  
+            - **Interactive Charts**: Drill into metrics like speaking duration, word counts, and sentiment  
+            """
+        )
+        
+        st.markdown(
+            """
+            Simply upload your diarization file and get a data-driven view of any multi-speaker audio—sports commentary or beyond.
+            For example we will use the the same csv file as used in the ["Speech-to-Chat" Hugging Face Space Made by kobakhit](https://huggingface.co/spaces/kobakhit/speech-to-chat)
+
+            """
+        )
     
     # Main content
     if st.session_state.data is not None:
@@ -512,7 +515,7 @@ def main():
     
     else:
         # Welcome screen
-        st.markdown("""
+        #st.markdown("""
         ## 🚀 Welcome to the Podcast Speaker Analytics Platform!
         
         This app provides comprehensive analysis of podcast speaker patterns and engagement:
