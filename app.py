@@ -515,25 +515,7 @@ def main():
     
     else:
         # Welcome screen
-        #st.markdown("""
-        ## 🚀 Welcome to the Podcast Speaker Analytics Platform!
-        
-        This app provides comprehensive analysis of podcast speaker patterns and engagement:
-        
-        ### 👥 Speaker Portraits
-        - **Visual speaker gallery** with AI-generated avatars
-        - **Comprehensive statistics** including speaking time, rate, and engagement
-        - **Speaking style analysis** (Storyteller, Fast Talker, Consistent, etc.)
-        - **Vocabulary richness** assessment
-        
-        ### 📈 Advanced Analytics
-        - **Interactive charts** showing speaking patterns and intensity
-        - **Temporal analysis** of conversation flow over time
-        - **Word density distribution** and conversation dynamics
-        - **Key insights** highlighting most active and consistent speakers
-        
-        **Get started by uploading your diarization CSV or JSON file in the sidebar!**
-        """)
+
         
         # Show expected format
         st.subheader("📋 Expected File Format")
