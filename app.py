@@ -208,10 +208,23 @@ def main():
         
         st.markdown(
             """
-            Simply upload your diarization file and get a data-driven view of any multi-speaker audio—sports commentary or beyond.
-            For example we will use the the same csv file as used in the ["Speech-to-Chat" Hugging Face Space Made by kobakhit](https://huggingface.co/spaces/kobakhit/speech-to-chat)
+            Simply upload your transcripts file and get a data-driven view of any multi-speaker audio—sports commentary or beyond.
+            For example, we will use the same example csv file as generated in the ["Speech-to-Chat" Hugging Face Space Made by kobakhit](https://huggingface.co/spaces/kobakhit/speech-to-chat)
 
             """
+        )
+        st.markdown("### 📂 Download Sample CSV")
+
+        # Get file content from GitHub
+        url = "https://raw.githubusercontent.com/koulmesahil/speechanalysis/refs/heads/main/Stephen%20A-transcript.csv"
+        response = requests.get(url)
+        sample_csv = response.content
+        
+        st.download_button(
+            label="⬇️ Download Sample CSV",
+            data=sample_csv,
+            file_name="sample.csv",
+            mime="text/csv"
         )
     
     # Main content
