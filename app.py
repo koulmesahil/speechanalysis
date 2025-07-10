@@ -153,16 +153,16 @@ def load_data(uploaded_file):
         return None
 
 def main():
-    st.title("🎙️ Podcast Speaker Analytics")
+    st.title("Podcast Speaker Analytics")
     st.markdown("Upload your diarization CSV/JSON to analyze speaker patterns and engagement")
     
     # Sidebar for file upload
     with st.sidebar:
-        st.header("📁 Upload Data")
+        st.header("📁 Upload Transcripts")
         uploaded_file = st.file_uploader(
             "Choose a CSV or JSON file",
             type=['csv', 'json'],
-            help="Upload your diarization data with speaker, timestamps, and transcripts"
+            help="Upload your speaker diarization transcripts data results"
         )
         
         if uploaded_file is not None:
@@ -235,7 +235,7 @@ def main():
                                     """, unsafe_allow_html=True)
                                 
                                 # Stats in expandable section
-                                with st.expander("📊 Detailed Stats", expanded=False):
+                                with st.expander("Detailed Stats", expanded=True):
                                     col_a, col_b = st.columns(2)
                                     
                                     with col_a:
@@ -249,7 +249,7 @@ def main():
                                         st.metric("Engagement", stats['engagement_level'])
                                     
                                     # Speaking style analysis
-                                    st.markdown("**🎯 Speaking Style**")
+                                    st.markdown("**Speaking Style**")
                                     if stats['avg_segment_length'] > 45:
                                         st.success("🎪 Storyteller - Long detailed segments")
                                     elif stats['speaking_rate'] > 2.5:
@@ -267,7 +267,7 @@ def main():
                                         st.info(f"💭 Focused Language ({vocab_score} unique words)")
         
         with tab2:
-            st.header("📈 Advanced Analytics Dashboard")
+            st.header("Advanced Analytics Dashboard")
             
             # Enhanced overview metrics
             col1, col2, col3, col4, col5 = st.columns(5)
@@ -276,7 +276,7 @@ def main():
             total_words = df['transcript'].astype(str).apply(lambda x: len(x.split())).sum()
             
             with col1:
-                st.metric("Total Duration", f"{total_duration:.0f}s", f"{total_duration/60:.1f} min")
+                st.metric("Total Duration", f"{total_duration:.0f}s")
             with col2:
                 st.metric("Total Words", f"{total_words:,}")
             with col3:
@@ -287,7 +287,7 @@ def main():
                 st.metric("Engagement Score", f"{(total_words/total_duration)*10:.0f}/100")
             
             # Interactive Charts Section
-            st.subheader("📊 Interactive Analytics")
+            st.subheader("Interactive Charts")
             
             # Row 1: Speaking distribution and patterns
             col1, col2 = st.columns(2)
@@ -304,7 +304,7 @@ def main():
                     speaker_data,
                     values='Duration',
                     names='Speaker',
-                    title="🎙️ Speaking Time Distribution",
+                    title="Speaking Time Distribution",
                     hover_data=['Words'],
                     color_discrete_sequence=px.colors.qualitative.Set3
                 )
@@ -333,7 +333,7 @@ def main():
                     size='Segments',
                     color='Consistency',
                     hover_name='Speaker',
-                    title="🎯 Speaker Intensity Analysis",
+                    title="Speaker Intensity Analysis",
                     labels={'Avg Duration': 'Avg Segment Duration (s)', 'Speaking Rate': 'Words per Second'},
                     color_continuous_scale='Viridis'
                 )
@@ -341,7 +341,7 @@ def main():
                 st.plotly_chart(fig, use_container_width=True)
             
             # Row 2: Temporal analysis
-            st.subheader("⏱️ Temporal Analysis")
+            #st.subheader("⏱️ Temporal Analysis")
             
             col1, col2 = st.columns(2)
             
@@ -355,7 +355,7 @@ def main():
                     x='time_bucket',
                     y='segments',
                     color='speaker',
-                    title="📅 Speaking Activity Over Time",
+                    title="Speaking Activity Over Time",
                     labels={'time_bucket': 'Time (minutes)', 'segments': 'Number of Segments'},
                     color_discrete_sequence=px.colors.qualitative.Pastel
                 )
@@ -368,7 +368,7 @@ def main():
                     df,
                     x='speaker',
                     y='duration',
-                    title="📏 Segment Duration Distribution",
+                    title="Segment Duration Distribution",
                     labels={'duration': 'Duration (seconds)', 'speaker': 'Speaker'},
                     color='speaker'
                 )
@@ -376,7 +376,7 @@ def main():
                 st.plotly_chart(fig, use_container_width=True)
             
             # Row 3: Advanced insights
-            st.subheader("🧠 Advanced Insights")
+            #st.subheader("Advanced Insights")
             
             col1, col2 = st.columns(2)
             
@@ -408,7 +408,7 @@ def main():
                     changes_per_minute,
                     x='minute',
                     y='speaker_changes',
-                    title="🔄 Conversation Dynamics",
+                    title="",
                     labels={'minute': 'Time (minutes)', 'speaker_changes': 'Speaker Changes'},
                     markers=True
                 )
@@ -416,7 +416,7 @@ def main():
                 st.plotly_chart(fig, use_container_width=True)
             
             # Timeline visualization
-            st.subheader("📈 Speaking Timeline")
+            st.subheader("Timeline")
             
             # Create timeline chart
             fig = px.timeline(
@@ -444,16 +444,16 @@ def main():
             
             with col1:
                 st.info(f"🏆 **Most Active Speaker**: {most_active}")
-                st.write(f"Dominated {speaker_stats[most_active]['speaking_percentage']:.1f}% of the conversation")
+                #st.write(f"Dominated {speaker_stats[most_active]['speaking_percentage']:.1f}% of the conversation")
             
             with col2:
                 st.info(f"💬 **Most Talkative**: {most_words}")
                 total_speaker_words = df[df['speaker'] == most_words]['word_count'].sum()
-                st.write(f"Contributed {total_speaker_words:,} words to the discussion")
+                #st.write(f"Contributed {total_speaker_words:,} words to the discussion")
             
             with col3:
                 st.info(f"🎯 **Most Consistent**: {most_consistent}")
-                st.write(f"Maintained steady pacing throughout the conversation")
+                #st.write(f"Maintained steady pacing throughout the conversation")
             
             # Export functionality
             st.subheader("📥 Export Data")
