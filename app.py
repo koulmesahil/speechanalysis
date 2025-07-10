@@ -168,7 +168,16 @@ def main():
             type=['csv', 'json'],
             help="Upload your speaker diarization transcripts data results"
         )
-        use_sample = st.sidebar.button("🔄 Use Sample CSV File")
+        use_sample = st.sidebar.button("📂 Click for Example File")
+        
+        # Add a note below the button
+        st.sidebar.markdown(
+            """
+            _This sample CSV is generated from the YouTube video:_  
+            [**Stephen A. Smith has JOKES with Shannon Sharpe 👏😂**](https://www.youtube.com/watch?v=TamrOZX9bu8)
+            """,
+            unsafe_allow_html=True
+        )
 
         
         
