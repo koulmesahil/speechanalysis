@@ -13,7 +13,7 @@ import requests
 
 # Configure page
 st.set_page_config(
-    page_title="Podcast Speaker Analytics",
+    page_title="Interactive Speaker Analytics",
     page_icon="🎙️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -154,7 +154,7 @@ def load_data(uploaded_file):
         return None
 
 def main():
-    st.title("Podcast Speaker Analytics")
+    st.title("Interactive Speaker Analytics")
     st.markdown("Upload your diarization CSV/JSON to analyze speaker patterns and engagement")
     
     # Sidebar for file upload
