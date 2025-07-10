@@ -168,10 +168,14 @@ def main():
             type=['csv', 'json'],
             help="Upload your speaker diarization transcripts data results"
         )
+        use_sample = st.sidebar.button("🔄 Use Sample CSV File")
+
         
         
         if uploaded_file is not None:
             df = load_data(uploaded_file)
+            elif use_sample:
+                    df = pd.read_csv("Stephen A-transcript.csv")  # Adjust path if it's in a subfolder
             if df is not None:
                 st.session_state.data = df
                 st.success(f"✅ Loaded {len(df)} segments")
