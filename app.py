@@ -58,6 +58,7 @@ def analyze_speaking_patterns(df):
         
         # Calculate speaking intensity (words per second)
         speaking_intensity = word_counts / speaker_df['duration']
+        speaking_intensity = speaking_intensity.replace([np.inf, -np.inf], 0)  # Handle division by zero
         
         patterns[speaker] = {
             'avg_gap': np.mean(speaking_gaps) if speaking_gaps else 0,
@@ -130,7 +131,7 @@ def load_data(uploaded_file):
             return None
         
         # Validate required columns
-        required_columns = ['speaker', 'start', 'end', 'duration', 'transcript', 'speakers_labeled']
+        required_columns = ['speaker', 'start', 'end', 'duration', 'transcript']
         missing_columns = [col for col in required_columns if col not in df.columns]
         
         if missing_columns:
@@ -141,6 +142,9 @@ def load_data(uploaded_file):
         df['start'] = pd.to_numeric(df['start'], errors='coerce')
         df['end'] = pd.to_numeric(df['end'], errors='coerce')
         df['duration'] = pd.to_numeric(df['duration'], errors='coerce')
+        
+        # Remove rows with NaN values in critical columns
+        df = df.dropna(subset=['start', 'end', 'duration'])
         
         return df
     
@@ -380,6 +384,7 @@ def main():
                 # Word density analysis
                 df['word_count'] = df['transcript'].astype(str).apply(lambda x: len(x.split()))
                 df['word_density'] = df['word_count'] / df['duration']
+                df['word_density'] = df['word_density'].replace([np.inf, -np.inf], 0)  # Handle division by zero
                 
                 fig = px.violin(
                     df,
@@ -410,6 +415,23 @@ def main():
                 fig.update_layout(height=400)
                 st.plotly_chart(fig, use_container_width=True)
             
+            # Timeline visualization
+            st.subheader("📈 Speaking Timeline")
+            
+            # Create timeline chart
+            fig = px.timeline(
+                df,
+                x_start='start',
+                x_end='end',
+                y='speaker',
+                color='speaker',
+                title="🕐 Speaking Segments Timeline",
+                labels={'start': 'Start Time (s)', 'end': 'End Time (s)'},
+                hover_data=['duration', 'transcript']
+            )
+            fig.update_layout(height=400)
+            st.plotly_chart(fig, use_container_width=True)
+            
             # Summary insights
             st.subheader("💡 Key Insights")
             
@@ -432,6 +454,35 @@ def main():
             with col3:
                 st.info(f"🎯 **Most Consistent**: {most_consistent}")
                 st.write(f"Maintained steady pacing throughout the conversation")
+            
+            # Export functionality
+            st.subheader("📥 Export Data")
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                if st.button("📊 Export Speaker Stats"):
+                    speaker_stats_df = pd.DataFrame(speaker_stats).T
+                    csv = speaker_stats_df.to_csv()
+                    st.download_button(
+                        label="Download Speaker Statistics CSV",
+                        data=csv,
+                        file_name="speaker_statistics.csv",
+                        mime="text/csv"
+                    )
+            
+            with col2:
+                if st.button("📈 Export Analytics Data"):
+                    analytics_df = df.copy()
+                    analytics_df['word_count'] = analytics_df['transcript'].astype(str).apply(lambda x: len(x.split()))
+                    analytics_df['word_density'] = analytics_df['word_count'] / analytics_df['duration']
+                    analytics_df['word_density'] = analytics_df['word_density'].replace([np.inf, -np.inf], 0)
+                    csv = analytics_df.to_csv(index=False)
+                    st.download_button(
+                        label="Download Enhanced Analytics CSV",
+                        data=csv,
+                        file_name="enhanced_analytics.csv",
+                        mime="text/csv"
+                    )
     
     else:
         # Welcome screen
@@ -462,42 +513,18 @@ def main():
             'start': [0.0, 45.2, 120.5],
             'end': [45.2, 120.5, 180.0],
             'duration': [45.2, 75.3, 59.5],
-            'transcript': ['Welcome to our show...', 'Thanks for having me...', 'Let me ask you about...'],
-            'speakers_labeled': ['Host', 'Guest', 'Host']
+            'transcript': ['Welcome to our show...', 'Thanks for having me...', 'Let me ask you about...']
         })
-        st.dataframe(sample_data) Speaking Segments",
-                    labels={'start': 'Start Time (s)', 'end': 'End Time (s)'}
-                )
-                st.plotly_chart(fig, use_container_width=True)
+        st.dataframe(sample_data)
         
-            
-            # Export functionality
-            st.subheader("📥 Export Data")
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                if st.button("📊 Export Speaker Stats"):
-                    speaker_stats_df = pd.DataFrame(speaker_stats).T
-                    csv = speaker_stats_df.to_csv()
-                    st.download_button(
-                        label="Download Speaker Statistics CSV",
-                        data=csv,
-                        file_name="speaker_statistics.csv",
-                        mime="text/csv"
-                    )
-            
-            with col2:
-                if st.button("📈 Export Analytics Data"):
-                    analytics_df = df.copy()
-                    analytics_df['word_count'] = analytics_df['transcript'].astype(str).apply(lambda x: len(x.split()))
-                    analytics_df['word_density'] = analytics_df['word_count'] / analytics_df['duration']
-                    csv = analytics_df.to_csv(index=False)
-                    st.download_button(
-                        label="Download Enhanced Analytics CSV",
-                        data=csv,
-                        file_name="enhanced_analytics.csv",
-                        mime="text/csv"
-                    )
+        st.markdown("""
+        **Required columns:**
+        - `speaker`: Speaker name/identifier
+        - `start`: Start time in seconds
+        - `end`: End time in seconds  
+        - `duration`: Segment duration in seconds
+        - `transcript`: Text content of the segment
+        """)
 
 if __name__ == "__main__":
     main()
