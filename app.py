@@ -158,12 +158,38 @@ def main():
     
     # Sidebar for file upload
     with st.sidebar:
+        st.header("About")
+        
+        st.markdown(
+            """
+            This web app takes speaker-diarization outputs (CSV or JSON) and turns them into **interactive dashboards**.
+            """
+        )        
+        
+        st.markdown(
+            """
+            **Key Features**  
+            - **Speaker Turn Timelines**: Visualize exactly when each speaker talks  
+            - **Interactive Charts**: Drill into metrics like speaking duration, word counts, and sentiment  
+            """
+        )
+        
+        st.markdown(
+            """
+            Simply upload your diarization file and get a data-driven view of any multi-speaker audio—sports commentary or beyond.
+            For example we will use the the same csv file as used in the ["Speech-to-Chat" Hugging Face Space Made by kobakhit](https://huggingface.co/spaces/kobakhit/speech-to-chat)
+
+            """
+        )
+
+
         st.header("📁 Upload Transcripts")
         uploaded_file = st.file_uploader(
             "Choose a CSV or JSON file",
             type=['csv', 'json'],
             help="Upload your speaker diarization transcripts data results"
         )
+        
         
         if uploaded_file is not None:
             df = load_data(uploaded_file)
